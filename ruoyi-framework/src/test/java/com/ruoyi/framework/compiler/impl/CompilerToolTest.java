@@ -31,7 +31,7 @@ public class CompilerToolTest {
 
         List<Runnable> runList = new ArrayList<>();
         long cur = System.currentTimeMillis();
-        for(int i = 0; i < 100; ++i) {
+        for(int i = 0; i < 50; ++i) {
             Class<Runnable> clazz = CompilerTool.compiler(code);
             Runnable runnable = clazz.newInstance();
             runnable.run();

@@ -120,8 +120,8 @@ public class CompilerTool {
     }
 
     public static <T> Class<T> compiler(String source) {
-        return compilerWithOptions(source, SYS_OPTIONS);
-//        return compilerWithOptions(source, null);
+        //return compilerWithOptions(source, SYS_OPTIONS);
+        return compilerWithOptions(source, null);
     }
 
     private static void doCompiler(JavaCompiler compiler, JavaFileManager manager, DiagnosticCollector<JavaFileObject> collector, List<String> options, List<String> classeNames, List<String> sourceList, List<Class<?>> classList) {
@@ -160,36 +160,36 @@ public class CompilerTool {
         }
     }
 
-    public static List<Class<?>> compilerWithOptions(List<String> sources, List<String> options) {
+    private static List<Class<?>> compilerWithOptions(List<String> sources, List<String> options) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<>();
         JavaFileManager manager = compiler.getStandardFileManager(collector, null, null);
 
         List<Class<?>> classList = new ArrayList<>(sources.size());
 
-        List<String> classeNames = new ArrayList<>();
+        List<String> classNames = new ArrayList<>();
         List<String> sourceList = new ArrayList<>();
 
         for(String source : sources) {
             String fullClassName = ClassNameUtils.findClassName(source);
-            if(!classeNames.contains(fullClassName)) {
-                classeNames.add(fullClassName);
+            if(!classNames.contains(fullClassName)) {
+                classNames.add(fullClassName);
                 sourceList.add(source);
                 continue;
             }
 
             try {
-                doCompiler(compiler, manager, collector, options, classeNames, sourceList, classList);
+                doCompiler(compiler, manager, collector, options, classNames, sourceList, classList);
             } finally {
-                classeNames.clear();
+                classNames.clear();
                 sourceList.clear();
-                classeNames.add(fullClassName);
+                classNames.add(fullClassName);
                 sourceList.add(source);
             }
         }
 
-        if(CollectionUtils.isNotEmpty(classeNames)) {
-            doCompiler(compiler, manager, collector, options, classeNames, sourceList, classList);
+        if(CollectionUtils.isNotEmpty(classNames)) {
+            doCompiler(compiler, manager, collector, options, classNames, sourceList, classList);
         }
         return classList;
     }
