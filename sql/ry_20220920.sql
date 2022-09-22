@@ -11,3 +11,6 @@ CREATE TABLE `sys_compiler_config` (
                             `remark` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
                             PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='代码动态编译配置表';
+
+INSERT INTO `sys_compiler_config` (`id`, `class_name`, `class_full_name`, `source_code`, `del_flag`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES
+(1, 'SysConfigServiceImpl', 'com.ruoyi.system.service.impl.SysConfigServiceImpl', 'aaaaa', '0', 'admin', '2022-09-23 01:02:07', 'admin', '2022-09-23 01:02:07', '121212');

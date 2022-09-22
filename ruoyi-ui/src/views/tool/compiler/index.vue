@@ -1,20 +1,17 @@
 <template>
     <div class="app-container">
-      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
-        <el-form-item label="上传" prop="field102" required>
-          <el-upload ref="field102" :file-list="field102fileList" :action="field102Action"
-            :before-upload="field102BeforeUpload">
-            <el-button size="small" type="primary" icon="el-icon-upload">点击上传</el-button>
-          </el-upload>
-        </el-form-item>
-        <el-form-item size="large">
-          <el-button type="primary" @click="submitForm">提交</el-button>
-          <el-button @click="resetForm">重置</el-button>
-        </el-form-item>
-      </el-form>
-
       <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
+        <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['system:role:add']"
+            >新增</el-button>
+         </el-col>
+        <el-col :span="1.5">
             <el-button
               type="info"
               plain
@@ -22,8 +19,61 @@
               size="mini"
               @click="handleImport"
             >上传Java文件</el-button>
-          </el-col>
-        </el-row>
+        </el-col>
+      </el-row>
+
+
+      <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="角色编号" prop="roleId" width="120" />
+        <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
+        <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
+        <el-table-column label="显示顺序" prop="roleSort" width="100" />
+        <el-table-column label="状态" align="center" width="100">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.status"
+              active-value="0"
+              inactive-value="1"
+              @change="handleStatusChange(scope.row)"
+            ></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.createTime) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope" v-if="scope.row.roleId !== 1">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="handleUpdate(scope.row)"
+              v-hasPermi="['system:role:edit']"
+            >修改</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+              v-hasPermi="['system:role:remove']"
+            >删除</el-button>
+            <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)" v-hasPermi="['system:role:edit']">
+              <span class="el-dropdown-link">
+                <i class="el-icon-d-arrow-right el-icon--right"></i>更多
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="handleDataScope" icon="el-icon-circle-check"
+                  v-hasPermi="['system:role:edit']">数据权限</el-dropdown-item>
+                <el-dropdown-item command="handleAuthUser" icon="el-icon-user"
+                  v-hasPermi="['system:role:edit']">分配用户</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
 
     <!-- 导入对话框 -->
     <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
@@ -92,24 +142,7 @@
     created() {},
     mounted() {},
     methods: {
-      submitForm() {
-        this.$refs['elForm'].validate(valid => {
-          if (!valid) return
-          // TODO 提交表单
-        })
-      },
-      resetForm() {
-        this.$refs['elForm'].resetFields()
-      },
-      field102BeforeUpload(file) {
-        let isRightSize = file.size / 1024 / 1024 < 4
-        if (!isRightSize) {
-          this.$message.error('文件大小超过 4MB')
-        }
-        return isRightSize
-      },
-
-      /** 导入按钮操作 */
+      /** 上传按钮操作 */
       handleImport() {
         this.upload.title = "Java文件上传";
         this.upload.open = true;
