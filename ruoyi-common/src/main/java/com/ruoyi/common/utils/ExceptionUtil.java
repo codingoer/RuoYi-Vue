@@ -2,6 +2,8 @@ package com.ruoyi.common.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
@@ -35,5 +37,16 @@ public class ExceptionUtil
             return "null";
         }
         return StringUtils.defaultString(msg);
+    }
+
+    public static RuntimeException uncheck(Throwable e){
+        if(e instanceof RuntimeException){
+            return (RuntimeException) e;
+        } else if(e instanceof InvocationTargetException){
+            e = ((InvocationTargetException) e).getTargetException();
+            return (e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e));
+        } else {
+            return new RuntimeException(e);
+        }
     }
 }
