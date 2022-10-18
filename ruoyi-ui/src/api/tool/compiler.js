@@ -17,3 +17,11 @@ export function addCompiler(data) {
     data: data
   })
 }
+
+// 查询详细
+export function getCompiler(id) {
+  return request({
+    url: '/tool/compiler/get/' + id,
+    method: 'get'
+  })
+}

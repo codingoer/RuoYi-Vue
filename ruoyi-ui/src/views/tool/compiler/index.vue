@@ -158,7 +158,7 @@
           <el-button @click="upload.open = false">取 消</el-button>
         </div>
       </el-dialog>
-      
+
         <!-- 添加或修改配置对话框 -->
         <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
           <el-form ref="form" :model="form" :rules="rules" label-width="100px">
@@ -193,7 +193,7 @@
    </div>
   </template>
   <script>
-  import { listCompiler,addCompiler  } from "@/api/tool/compiler";
+  import { listCompiler,addCompiler,getCompiler  } from "@/api/tool/compiler";
   import { getToken } from "@/utils/auth";
   export default {
     name: "Compiler",
@@ -317,14 +317,20 @@
         },
       /** 修改按钮操作 */
       handleUpdate(row) {
+          console.log("aaa");
           this.reset();
+          const id = row.id || this.ids
+          getCompiler(id).then(response => {
+            this.form = response.data;
+            this.open = true;
+            this.title = "修改配置";
+          });
         },
       /** 提交按钮 */
       submitForm: function() {
             this.$refs["form"].validate(valid => {
               if (valid) {
                 if (this.form.id != undefined) {
-
 
                 } else {
                   addCompiler(this.form).then(response => {
@@ -348,17 +354,17 @@
         className: undefined,
         classFullName: undefined,
         status: "0",
+        remark: undefined,
         sourceCode: undefined
       };
       this.resetForm("form");
     },
   },
-}  
+}
 </script>
 
 <style>
   .el-upload__tip {
     line-height: 1.2;
-  }  
+  }
 </style>
-  

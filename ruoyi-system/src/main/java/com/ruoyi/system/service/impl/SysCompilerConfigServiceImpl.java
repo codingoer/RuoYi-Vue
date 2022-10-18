@@ -26,6 +26,11 @@ public class SysCompilerConfigServiceImpl implements ISysCompilerConfigService {
     }
 
     @Override
+    public SysCompilerConfig selectById(Long id) {
+        return sysCompilerConfigMapper.selectById(id);
+    }
+
+    @Override
     public int deleteCompilerConfigById(Long configId) {
         return sysCompilerConfigMapper.deleteCompilerConfigById(configId);
     }

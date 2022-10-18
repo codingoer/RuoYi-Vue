@@ -21,6 +21,14 @@ public interface SysCompilerConfigMapper {
     List<SysCompilerConfig> selectCompilerConfigList(SysCompilerConfig config);
 
     /**
+     * 根据ID查询配置
+     *
+     * @param id 主键
+     * @return 配置信息
+     */
+    SysCompilerConfig selectById(Long id);
+
+    /**
      * 新增配置信息
      *
      * @param config 配置信息

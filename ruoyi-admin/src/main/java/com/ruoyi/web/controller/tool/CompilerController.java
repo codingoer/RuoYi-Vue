@@ -41,6 +41,11 @@ public class CompilerController extends BaseController {
         return AjaxResult.success();
     }
 
+    @GetMapping(value = "/get/{id}")
+    public AjaxResult getById(@PathVariable Long id) {
+        return AjaxResult.success(sysCompilerConfigService.selectById(id));
+    }
+
     @PreAuthorize("@ss.hasPermi('system:user:import')")
     @PostMapping("/dynamic")
     public AjaxResult register(MultipartFile file) {

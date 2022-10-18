@@ -31,6 +31,11 @@
         order by id
     </select>
 
+    <select id="selectById" parameterType="Long" resultMap="SysCompilerConfigResult">
+        <include refid="selectCompilerConfigVo"/>
+        where id = #{id}
+    </select>
+
     <insert id="insertCompilerConfig" parameterType="sysCompilerConfig" useGeneratedKeys="true" keyProperty="id">
         insert into sys_compiler_config(
         <if test="className != null and className != ''">class_name,</if>
