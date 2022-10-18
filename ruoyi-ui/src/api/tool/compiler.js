@@ -8,3 +8,12 @@ export function listCompiler(query) {
     params: query
   })
 }
+
+// 新增配置
+export function addCompiler(data) {
+  return request({
+    url: '/tool/compiler/add',
+    method: 'post',
+    data: data
+  })
+}

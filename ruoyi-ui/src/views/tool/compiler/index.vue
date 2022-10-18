@@ -91,10 +91,10 @@
       <!-- 数据列表 -->
       <el-table v-loading="loading" :data="compilerList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="配置ID" prop="id" width="120" />
-        <el-table-column label="类名称" prop="className" :show-overflow-tooltip="true" width="150" />
-        <el-table-column label="完全限定名" prop="classFullName" :show-overflow-tooltip="true" width="150" />
-        <el-table-column label="源代码" prop="sourceCode" width="150" />
+        <el-table-column label="配置ID" prop="id" width="70" />
+        <el-table-column label="类名称" prop="className" :show-overflow-tooltip="true" width="170" />
+        <el-table-column label="完全限定名" prop="classFullName" :show-overflow-tooltip="true" width="200" />
+        <el-table-column label="备注" prop="remark" width="100" />
         <el-table-column label="状态" align="center" width="100">
           <template slot-scope="scope">
             <el-switch
@@ -163,10 +163,10 @@
         <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
           <el-form ref="form" :model="form" :rules="rules" label-width="100px">
             <el-form-item label="类名称" prop="className">
-              <el-input v-model="form.roleName" placeholder="类名称" />
+              <el-input v-model="form.className" placeholder="类名称" />
             </el-form-item>
             <el-form-item label="完全限定名" prop="classFullName">
-              <el-input v-model="form.roleName" placeholder="完全限定名" />
+              <el-input v-model="form.classFullName" placeholder="完全限定名" />
             </el-form-item>
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
@@ -177,8 +177,11 @@
                 >{{dict.label}}</el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" placeholder="备注" />
+            </el-form-item>
             <el-form-item label="源代码">
-              <el-input v-model="form.remark" type="textarea" placeholder="sourceCode"></el-input>
+              <el-input v-model="form.sourceCode" type="textarea" placeholder="sourceCode"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -190,7 +193,7 @@
    </div>
   </template>
   <script>
-  import { listCompiler,  } from "@/api/tool/compiler";
+  import { listCompiler,addCompiler  } from "@/api/tool/compiler";
   import { getToken } from "@/utils/auth";
   export default {
     name: "Compiler",
@@ -322,8 +325,13 @@
               if (valid) {
                 if (this.form.id != undefined) {
 
-                } else {
 
+                } else {
+                  addCompiler(this.form).then(response => {
+                    this.$modal.msgSuccess("新增成功");
+                    this.open = false;
+                    this.getList();
+                  });
                 }
               }
             });

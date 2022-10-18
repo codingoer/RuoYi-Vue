@@ -34,6 +34,13 @@ public class CompilerController extends BaseController {
         return getDataTable(list);
     }
 
+    @PostMapping("/add")
+    public AjaxResult add(@RequestBody SysCompilerConfig config) {
+        config.setCreateBy(getUsername());
+        sysCompilerConfigService.insertCompilerConfig(config);
+        return AjaxResult.success();
+    }
+
     @PreAuthorize("@ss.hasPermi('system:user:import')")
     @PostMapping("/dynamic")
     public AjaxResult register(MultipartFile file) {
