@@ -33,6 +33,11 @@ public class SysCompilerConfig extends BaseEntity {
     private String sourceCode;
 
     /**
+     * 0 正常 1 停用
+     */
+    private String status;
+
+    /**
      * 删除标志（0代表存在 2代表删除)
      */
     private String delFlag;
@@ -67,6 +72,14 @@ public class SysCompilerConfig extends BaseEntity {
 
     public void setSourceCode(String sourceCode) {
         this.sourceCode = sourceCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getDelFlag() {
