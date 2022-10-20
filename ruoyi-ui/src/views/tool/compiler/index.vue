@@ -5,7 +5,7 @@
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch">
         <el-form-item label="类名称" prop="className">
           <el-input
-            v-model="queryParams.roleName"
+            v-model="queryParams.className"
             placeholder="请输入类名称"
             clearable
             style="width: 240px"
@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="类完全限定名" prop="classFullName">
           <el-input
-            v-model="queryParams.roleKey"
+            v-model="queryParams.classFullName"
             placeholder="请输入类完全限定名"
             clearable
             style="width: 240px"
@@ -193,7 +193,7 @@
    </div>
   </template>
   <script>
-  import { listCompiler,addCompiler,getCompiler  } from "@/api/tool/compiler";
+  import { listCompiler,addCompiler,getCompiler,updateCompiler,changeStatus  } from "@/api/tool/compiler";
   import { getToken } from "@/utils/auth";
   export default {
     name: "Compiler",
@@ -220,8 +220,8 @@
         queryParams: {
           pageNum: 1,
           pageSize: 10,
-          roleName: undefined,
-          roleKey: undefined,
+          className: undefined,
+          classFullName: undefined,
           status: undefined
         },
         // 日期范围
@@ -295,7 +295,7 @@
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
-        this.ids = selection.map(item => item.roleId)
+        this.ids = selection.map(item => item.id)
         this.single = selection.length!=1
         this.multiple = !selection.length
       },
@@ -317,7 +317,6 @@
         },
       /** 修改按钮操作 */
       handleUpdate(row) {
-          console.log("aaa");
           this.reset();
           const id = row.id || this.ids
           getCompiler(id).then(response => {
@@ -331,7 +330,11 @@
             this.$refs["form"].validate(valid => {
               if (valid) {
                 if (this.form.id != undefined) {
-
+                  updateCompiler(this.form).then(response => {
+                      this.$modal.msgSuccess("修改成功");
+                      this.open = false;
+                      this.getList();
+                  });
                 } else {
                   addCompiler(this.form).then(response => {
                     this.$modal.msgSuccess("新增成功");
@@ -359,6 +362,18 @@
       };
       this.resetForm("form");
     },
+
+    // 状态修改
+    handleStatusChange(row) {
+          let text = row.status === "0" ? "启用" : "停用";
+          this.$modal.confirm('确认要"' + text + '""' + row.className + '"配置吗？').then(function() {
+            return changeStatus(row.id, row.status);
+          }).then(() => {
+            this.$modal.msgSuccess(text + "成功");
+          }).catch(function() {
+            row.status = row.status === "0" ? "1" : "0";
+          });
+      },
   },
 }
 </script>

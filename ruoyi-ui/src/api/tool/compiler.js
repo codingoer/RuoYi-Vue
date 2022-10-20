@@ -25,3 +25,25 @@ export function getCompiler(id) {
     method: 'get'
   })
 }
+
+// 修改配置
+export function updateCompiler(data) {
+  return request({
+    url: '/tool/compiler/update',
+    method: 'post',
+    data: data
+  })
+}
+
+// 状态修改
+export function changeStatus(id, status) {
+  const data = {
+    id,
+    status
+  }
+  return request({
+    url: '/tool/compiler/update',
+    method: 'post',
+    data: data
+  })
+}

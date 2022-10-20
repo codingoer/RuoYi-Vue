@@ -63,6 +63,7 @@
             <if test="classFullName != null and classFullName != ''">class_full_name = #{classFullName},</if>
             <if test="sourceCode != null and sourceCode != ''">source_code = #{sourceCode},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="status != null">status = #{status},</if>
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             update_time = sysdate()
         </set>

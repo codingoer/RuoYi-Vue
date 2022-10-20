@@ -26,7 +26,7 @@ public class CompilerController extends BaseController {
     @Resource
     private ISysCompilerConfigService sysCompilerConfigService;
 
-    @PreAuthorize("@ss.hasPermi('system:compiler:list')")
+    @PreAuthorize("@ss.hasPermi('tool:compiler:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysCompilerConfig config) {
         startPage();
@@ -46,7 +46,14 @@ public class CompilerController extends BaseController {
         return AjaxResult.success(sysCompilerConfigService.selectById(id));
     }
 
-    @PreAuthorize("@ss.hasPermi('system:user:import')")
+    @PostMapping("/update")
+    public AjaxResult update(@RequestBody SysCompilerConfig config) {
+        config.setUpdateBy(getUsername());
+        sysCompilerConfigService.updateCompilerConfig(config);
+        return AjaxResult.success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('tool:compiler:dynamic')")
     @PostMapping("/dynamic")
     public AjaxResult register(MultipartFile file) {
         String name = file.getOriginalFilename();
