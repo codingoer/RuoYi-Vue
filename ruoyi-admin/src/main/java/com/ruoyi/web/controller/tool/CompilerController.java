@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.tool;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.framework.compiler.CompilerTool;
 import com.ruoyi.system.domain.SysCompilerConfig;
 import com.ruoyi.system.service.ISysCompilerConfigService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,5 +59,12 @@ public class CompilerController extends BaseController {
     public AjaxResult register(MultipartFile file) {
         String name = file.getOriginalFilename();
         return AjaxResult.success(name);
+    }
+
+    @GetMapping(value = "/dynamic/{id}")
+    public AjaxResult compilerByConfig(@PathVariable Long id) {
+        SysCompilerConfig sysCompilerConfig = sysCompilerConfigService.selectById(id);
+        CompilerTool.compiler(sysCompilerConfig.getSourceCode());
+        return AjaxResult.success();
     }
 }

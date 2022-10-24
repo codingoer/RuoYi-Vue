@@ -126,6 +126,13 @@
               @click="handleDelete(scope.row)"
               v-hasPermi="['system:role:remove']"
             >删除</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="handleCompiler(scope.row)"
+              v-hasPermi="['system:role:compiler']"
+            >编译</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -193,7 +200,7 @@
    </div>
   </template>
   <script>
-  import { listCompiler,addCompiler,getCompiler,updateCompiler,changeStatus  } from "@/api/tool/compiler";
+  import { listCompiler,addCompiler,getCompiler,updateCompiler,changeStatus,compilerById  } from "@/api/tool/compiler";
   import { getToken } from "@/utils/auth";
   export default {
     name: "Compiler",
@@ -374,6 +381,14 @@
             row.status = row.status === "0" ? "1" : "0";
           });
       },
+
+      /** 编译按钮操作 */
+      handleCompiler(row) {
+          const id = row.id;
+          compilerById(id).then(response => {
+            this.$modal.msgSuccess("编译成功");
+          });
+    },
   },
 }
 </script>

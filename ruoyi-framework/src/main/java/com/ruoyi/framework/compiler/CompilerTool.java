@@ -121,7 +121,7 @@ public class CompilerTool {
 
     public static <T> Class<T> compiler(String source) {
         //return compilerWithOptions(source, SYS_OPTIONS);
-        return compilerWithOptions(source, null);
+        return compilerWithOptions(source, SYS_OPTIONS);
     }
 
     private static void doCompiler(JavaCompiler compiler, JavaFileManager manager, DiagnosticCollector<JavaFileObject> collector, List<String> options, List<String> classeNames, List<String> sourceList, List<Class<?>> classList) {

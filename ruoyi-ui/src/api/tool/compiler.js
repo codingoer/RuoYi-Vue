@@ -47,3 +47,11 @@ export function changeStatus(id, status) {
     data: data
   })
 }
+
+// 编译操作
+export function compilerById(id) {
+  return request({
+    url: '/tool/compiler/dynamic/' + id,
+    method: 'get'
+  })
+}
