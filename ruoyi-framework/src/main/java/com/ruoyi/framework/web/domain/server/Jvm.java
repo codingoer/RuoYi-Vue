@@ -127,4 +127,12 @@ public class Jvm
     {
         return ManagementFactory.getRuntimeMXBean().getInputArguments().toString();
     }
+
+    public String getClassPath() {
+        return ManagementFactory.getRuntimeMXBean().getClassPath();
+    }
+
+    public String getBootClassPath() {
+        return ManagementFactory.getRuntimeMXBean().getBootClassPath();
+    }
 }

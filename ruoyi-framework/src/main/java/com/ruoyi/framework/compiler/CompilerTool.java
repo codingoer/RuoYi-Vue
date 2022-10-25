@@ -16,6 +16,7 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,8 +78,12 @@ public class CompilerTool {
         return classPath.toString();
     }
 
+    private static String getClassPathNew() {
+        return ManagementFactory.getRuntimeMXBean().getClassPath();
+    }
+
     private static final List<String> options() {
-        String classPath = getClassPath();
+        String classPath = getClassPathNew();
         log.info("Compiler option is {}", classPath);
         if(StringUtils.isBlank(classPath)) {
             return null;

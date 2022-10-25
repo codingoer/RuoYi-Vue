@@ -5,7 +5,10 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.framework.compiler.CompilerTool;
 import com.ruoyi.system.domain.SysCompilerConfig;
+import com.ruoyi.system.domain.SysNotice;
 import com.ruoyi.system.service.ISysCompilerConfigService;
+import com.ruoyi.system.service.impl.SysNoticeServiceImpl;
+import org.springframework.objenesis.instantiator.util.ClassUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -64,7 +67,9 @@ public class CompilerController extends BaseController {
     @GetMapping(value = "/dynamic/{id}")
     public AjaxResult compilerByConfig(@PathVariable Long id) {
         SysCompilerConfig sysCompilerConfig = sysCompilerConfigService.selectById(id);
-        CompilerTool.compiler(sysCompilerConfig.getSourceCode());
+        Class<SysNoticeServiceImpl> clazz = CompilerTool.compiler(sysCompilerConfig.getSourceCode());
+        SysNoticeServiceImpl sysNoticeService = ClassUtils.newInstance(clazz);
+        List<SysNotice> sysNotices = sysNoticeService.selectNoticeList(null);
         return AjaxResult.success();
     }
 }
